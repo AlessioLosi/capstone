@@ -1,37 +1,33 @@
 package eventi.capstone.Entities;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
+@Table(name = "prenotazioni")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
-@Table(name = "prenotazioni")
 public class Prenotazioni {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Setter(AccessLevel.NONE)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "id_utente")
-    private Utenti utente;
-
-    @ManyToOne
-    @JoinColumn(name = "id_evento")
-    private Eventi evento;
-
+    private UUID id;
     private LocalDate data;
+    @ManyToOne
+    @JoinColumn(name = "evento_id")
+    private Eventi eventi;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User utente;
 
-    public Prenotazioni(Utenti utente, Eventi evento, LocalDate data) {
-        this.utente = utente;
-        this.evento = evento;
+    public Prenotazioni(LocalDate data, Eventi event, User utente) {
         this.data = data;
+        this.eventi = eventi;
+        this.utente = utente;
     }
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -17,18 +19,20 @@ public class Commenti {
     @Setter(AccessLevel.NONE)
     private Long id;
     private String testo;
+    private LocalDateTime data;
     @ManyToOne
     @JoinColumn(name = "id_creatore")
-    private Utenti creatore;
+    private User creatore;
 
     @ManyToOne
     @JoinColumn(name = "id_post")
     private Post post;
 
 
-    public Commenti(Utenti creatore, Post post, String testo) {
+    public Commenti(User creatore, Post post, String testo, LocalDateTime data) {
         this.creatore = creatore;
         this.post = post;
         this.testo = testo;
+        this.data = LocalDateTime.now();
     }
 }

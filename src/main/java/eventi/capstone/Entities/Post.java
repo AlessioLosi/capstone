@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -22,18 +21,14 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "id_creatore")
-    private Utenti creatore;
-
-    @OneToMany(mappedBy = "post")
-    private List<Commenti> listaCommenti;
+    private User creatore;
 
     private String testo;
-    private LocalDateTime dataEOra;
+    private LocalDateTime data;
 
-    public Post(Utenti creatore, List<Commenti> listaCommenti, String testo, LocalDateTime dataEOra) {
+    public Post(User creatore, String testo, LocalDateTime dataEOra) {
         this.creatore = creatore;
-        this.listaCommenti = listaCommenti;
         this.testo = testo;
-        this.dataEOra = LocalDateTime.now();
+        this.data = LocalDateTime.now();
     }
 }

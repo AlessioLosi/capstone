@@ -1,37 +1,33 @@
 package eventi.capstone.Entities;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
+@Table(name = "eventi")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
-@Table(name = "eventi")
 public class Eventi {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue
     @Setter(AccessLevel.NONE)
-    private UUID idEvento;
-
-    private String artista;
-    private String luogo;
-    private Integer postiDisponibili;
-
+    private UUID id;
+    private String nome;
+    private int postiDisponibili;
+    private LocalDate data;
     @ManyToOne
-    @JoinColumn(name = "creatore_evento")
-    private Utenti creatoreEvento;
+    @JoinColumn(name = "id_organizzatore")
+    private User organizzatore;
 
-    public Eventi(String artista, String luogo, Integer postiDisponibili, Utenti creatoreEvento) {
-        this.artista = artista;
-        this.luogo = luogo;
+    public Eventi(String nome, int postiDisponibili, LocalDate data, User organizzatore) {
+        this.nome = nome;
         this.postiDisponibili = postiDisponibili;
-        this.creatoreEvento = creatoreEvento;
+        this.data = data;
+        this.organizzatore = organizzatore;
     }
-
 }
