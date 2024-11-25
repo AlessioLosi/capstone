@@ -47,8 +47,8 @@ public class EventiService {
         this.eR.delete(evento);
     }
 
-    public Page<Eventi> findAllByArtista(String artista, int page, int size, String sortBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+    public Page<Eventi> findAllByArtista(String artista, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         return eR.findByArtista(artista, pageable);
     }
 

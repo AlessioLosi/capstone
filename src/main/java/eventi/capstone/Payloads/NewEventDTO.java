@@ -9,8 +9,8 @@ public record NewEventDTO(
         String nome,
         @NotNull(message = "Il campo artista non può essere vuoto")
         String artista,
-        LocalDate data,
         int postiDisponibili,
+        LocalDate data,
         @NotNull(message = "Il campo luogo non può essere nullo")
         String luogo) {
 }

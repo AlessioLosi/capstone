@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentiRepository extends JpaRepository<Commenti, Long> {
     Page<Commenti> findByCreatore(User currentAuthenticatedUtente, Pageable pageable);
+
+    Page<Commenti> findByPost(Long id, Pageable pageable);
 }
