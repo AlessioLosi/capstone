@@ -68,6 +68,7 @@ public class UserService {
         utente.setEmail(payload.email());
         utente.setUsername(payload.username());
         utente.setPassword(payload.password());
+        utente.setAvatar("https://ui-avatars.com/api/?name=" + payload.nome() + "+" + payload.cognome());
         return this.uR.save(utente);
     }
 

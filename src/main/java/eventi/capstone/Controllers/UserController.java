@@ -24,6 +24,7 @@ public class UserController {
     @Autowired
     private CommentiService commentiService;
 
+    //gestione utente
     @GetMapping("/me")
     public User getProfile(@AuthenticationPrincipal User currentAuthenticatedUtente) {
         return currentAuthenticatedUtente;
@@ -33,5 +34,7 @@ public class UserController {
     public User updateProfile(@AuthenticationPrincipal User currentAuthenticatedUtente, @RequestBody @Validated UtentiDTO body) {
         return this.userService.findByIdAndUpdate(currentAuthenticatedUtente.getId(), body);
     }
-    
+    // gestione eventi
+
+
 }
