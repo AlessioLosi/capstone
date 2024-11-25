@@ -1,5 +1,6 @@
 package eventi.capstone.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,6 +20,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @JsonIgnoreProperties({"password", "tipologiaUtente", "accountNonLocked", "credentialsNonExpired", "accountNonExpired", "authorities", "enabled"})
 public class User implements UserDetails {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonBackReference
+    List<Prenotazioni> prenotazioni;
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)

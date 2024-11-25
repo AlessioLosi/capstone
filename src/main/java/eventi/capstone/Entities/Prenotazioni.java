@@ -23,11 +23,11 @@ public class Prenotazioni {
     private Eventi eventi;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User utente;
+    private User user;
 
-    public Prenotazioni(LocalDate data, Eventi event, User utente) {
-        this.data = data;
-        this.eventi = eventi;
-        this.utente = utente;
+    public Prenotazioni(Eventi event, User user) {
+        this.data = LocalDate.now();
+        this.eventi = event;
+        this.user = user;
     }
 }

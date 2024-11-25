@@ -26,8 +26,7 @@ public class Post {
     private String testo;
     private LocalDateTime data;
 
-    public Post(User creatore, String testo, LocalDateTime dataEOra) {
-        this.creatore = creatore;
+    public Post(String testo) {
         this.testo = testo;
         this.data = LocalDateTime.now();
     }

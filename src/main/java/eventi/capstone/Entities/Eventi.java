@@ -18,16 +18,19 @@ public class Eventi {
     @Setter(AccessLevel.NONE)
     private UUID id;
     private String nome;
+    private String artista;
+    private String luogo;
     private int postiDisponibili;
     private LocalDate data;
     @ManyToOne
     @JoinColumn(name = "id_organizzatore")
     private User organizzatore;
 
-    public Eventi(String nome, int postiDisponibili, LocalDate data, User organizzatore) {
+    public Eventi(String nome, String artista, int postiDisponibili, LocalDate data, String luogo) {
         this.nome = nome;
+        this.artista = artista;
         this.postiDisponibili = postiDisponibili;
         this.data = data;
-        this.organizzatore = organizzatore;
+        this.luogo = luogo;
     }
 }

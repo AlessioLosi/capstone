@@ -29,9 +29,8 @@ public class Commenti {
     private Post post;
 
 
-    public Commenti(User creatore, Post post, String testo, LocalDateTime data) {
-        this.creatore = creatore;
-        this.post = post;
+    public Commenti(String testo) {
+
         this.testo = testo;
         this.data = LocalDateTime.now();
     }
