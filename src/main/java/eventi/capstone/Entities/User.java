@@ -18,7 +18,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @NoArgsConstructor
-@JsonIgnoreProperties({"password", "tipologiaUtente", "accountNonLocked", "credentialsNonExpired", "accountNonExpired", "authorities", "enabled"})
+@JsonIgnoreProperties({"password", "accountNonLocked", "credentialsNonExpired", "accountNonExpired", "authorities", "enabled"})
 public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonBackReference

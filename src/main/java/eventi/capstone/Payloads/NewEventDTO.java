@@ -12,5 +12,6 @@ public record NewEventDTO(
         int postiDisponibili,
         LocalDate data,
         @NotNull(message = "Il campo luogo non può essere nullo")
-        String luogo) {
+        String luogo,
+        double prezzo) {
 }

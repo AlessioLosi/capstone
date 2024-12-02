@@ -17,15 +17,16 @@ public class AuthService {
     @Autowired
     private PasswordEncoder bcryptencoder;
 
-    public String checkCredenzialiAndToken(NewUserLoginDTO body) {
 
+    public String checkCredenzialiAndToken(NewUserLoginDTO body) {
         User userFound = this.userService.findByEmail(body.email());
         if (bcryptencoder.matches(body.password(), userFound.getPassword())) {
             String accessToken = jwt.createToken(userFound);
             return accessToken;
         } else {
-            throw new UnauthorizedException("credenziali inserite errate");
+            throw new UnauthorizedException("Le credenziali inserite sono errate");
         }
     }
+
 
 }

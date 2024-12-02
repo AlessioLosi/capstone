@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +52,22 @@ public class PostService {
     public Page<Post> findAllByCreatore(User currentAuthenticatedUtente, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return pR.findByCreatore(currentAuthenticatedUtente, pageable);
+    }
+
+    public Page<Post> findAll(int page, int size, String sortBy) {
+        if (size > 20) size = 20;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return this.pR.findAll(pageable);
+    }
+
+    public Post findByIdAndUpdate(User currentAuthenticatedUtente, Long id, PostDTO payload) {
+        Post post = this.findById(id);
+        if (!post.getCreatore().equals(currentAuthenticatedUtente.getId())) {
+            throw new UnauthorizedException("Non puoi cambiare questo post");
+        }
+
+        post.setTesto(payload.testo());
+        return this.pR.save(post);
     }
 
 }

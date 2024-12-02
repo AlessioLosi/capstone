@@ -14,12 +14,12 @@ public class JWT {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String createToken(User user) {
+    public String createToken(User utente) {
 
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
-                .subject(String.valueOf(user.getId()))
+                .subject(String.valueOf(utente.getId()))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }

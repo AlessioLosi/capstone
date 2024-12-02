@@ -4,6 +4,7 @@ import eventi.capstone.Entities.User;
 import eventi.capstone.Payloads.UtentiDTO;
 import eventi.capstone.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,17 +25,16 @@ public class UserController {
     @Autowired
     private CommentiService commentiService;
 
-    //gestione utente
     @GetMapping("/me")
-    public User getProfile(@AuthenticationPrincipal User currentAuthenticatedUtente) {
-        return currentAuthenticatedUtente;
+    @ResponseStatus(HttpStatus.OK)
+    public User getProfile(@AuthenticationPrincipal User currentAuthenticatedUser) {
+        return currentAuthenticatedUser;
     }
 
     @PutMapping("/me")
     public User updateProfile(@AuthenticationPrincipal User currentAuthenticatedUtente, @RequestBody @Validated UtentiDTO body) {
         return this.userService.findByIdAndUpdate(currentAuthenticatedUtente.getId(), body);
     }
-    // gestione eventi
 
 
 }

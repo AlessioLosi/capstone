@@ -22,15 +22,17 @@ public class Eventi {
     private String luogo;
     private int postiDisponibili;
     private LocalDate data;
+    private double prezzo;
     @ManyToOne
     @JoinColumn(name = "id_organizzatore")
     private User organizzatore;
 
-    public Eventi(String nome, String artista, int postiDisponibili, LocalDate data, String luogo) {
+    public Eventi(String nome, String artista, int postiDisponibili, LocalDate data, String luogo, double prezzo) {
         this.nome = nome;
         this.artista = artista;
         this.postiDisponibili = postiDisponibili;
         this.data = data;
         this.luogo = luogo;
+        this.prezzo = prezzo;
     }
 }

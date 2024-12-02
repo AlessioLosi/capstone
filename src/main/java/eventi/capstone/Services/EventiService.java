@@ -28,7 +28,7 @@ public class EventiService {
 
     public Eventi saveEvento(NewEventDTO payload, User currentUtente) {
         User utente = this.userService.findById(currentUtente.getId());
-        Eventi newEvento = new Eventi(payload.nome(), payload.artista(), payload.postiDisponibili(), payload.data(), payload.luogo());
+        Eventi newEvento = new Eventi(payload.nome(), payload.artista(), payload.postiDisponibili(), payload.data(), payload.luogo(), payload.prezzo());
         newEvento.setOrganizzatore(utente);
         return this.eR.save(newEvento);
     }

@@ -5,7 +5,6 @@ import eventi.capstone.Entities.Prenotazioni;
 import eventi.capstone.Entities.User;
 import eventi.capstone.Exceptions.BadRequestException;
 import eventi.capstone.Exceptions.NotFoundException;
-import eventi.capstone.Payloads.NewPrenotazioniDTO;
 import eventi.capstone.Repositories.PrenotazioniRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,8 +25,8 @@ public class PrenotazioniService {
     @Autowired
     private UserService userService;
 
-    public Prenotazioni savePrenotazione(NewPrenotazioniDTO payload, User currentAuthenticatedUtente) {
-        Eventi evento = this.eventiService.findById(payload.evento_id());
+    public Prenotazioni savePrenotazione(Prenotazioni payload, User currentAuthenticatedUtente) {
+        Eventi evento = this.eventiService.findById(payload.getEventi().getId());
         User utente = this.userService.findById(currentAuthenticatedUtente.getId());
         if (this.prenoR.existsByUserAndEventi(utente, evento)) {
             throw new BadRequestException("Hai già una prenotazione per questo evento.");
@@ -53,6 +52,11 @@ public class PrenotazioniService {
     public void deletePrenotazione(UUID id_prenotazione) {
         Prenotazioni prenotazione = this.findById(id_prenotazione);
         this.prenoR.delete(prenotazione);
+    }
+
+
+    public boolean existsByUserAndEventi(User currentAuthenticatedUtente, Eventi evento) {
+        return false;
     }
 
 

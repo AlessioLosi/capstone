@@ -24,6 +24,8 @@ public class Prenotazioni {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    private TipologiaPagamento statoPagamento;
+    private String paymentIntentId;
 
     public Prenotazioni(Eventi event, User user) {
         this.data = LocalDate.now();

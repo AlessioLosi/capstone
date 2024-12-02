@@ -42,6 +42,17 @@ public class EventiController {
         return this.eventiService.findAllByArtista(artista, page, size);
     }
 
+    @GetMapping("/tuttieventi")
+    public Page<Eventi> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "id") String sortBy) {
+        return this.eventiService.findAll(page, size, sortBy);
+    }
+
+    @GetMapping("eventi/{eventId}")
+    public Eventi findById(@PathVariable UUID eventId) {
+        return this.eventiService.findById(eventId);
+    }
+
     @DeleteMapping("/me/eventi/{id_evento}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ADMIN')")
