@@ -1,46 +1,58 @@
 package eventi.capstone.Stripe;
 
-
-import com.stripe.model.Event;
-import com.stripe.model.PaymentIntent;
-import com.stripe.net.Webhook;
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
+import eventi.capstone.Entities.Eventi;
+import eventi.capstone.Services.EventiService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/webhook")
+@RequestMapping("/payments")
 public class StripeController {
 
-    private static final String ENDPOINT_SECRET = "whsec_xxxxxxxxx";
+    @Autowired
+    private EventiService eventiService;
 
-    @PostMapping
-    public String handleStripeEvent(HttpServletRequest request) {
-        String payload;
-        try {
-            payload = new String(request.getInputStream().readAllBytes());
-        } catch (IOException e) {
-            return "Errore nel leggere il payload";
-        }
+    @PostMapping("/checkout/{eventId}")
+    public String createCheckoutSession(@PathVariable UUID eventId) throws StripeException {
+        Eventi evento = eventiService.findById(eventId);
 
-        String sigHeader = request.getHeader("Stripe-Signature");
+        SessionCreateParams.LineItem.PriceData.ProductData productData =
+                SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                        .setName(evento.getNome())
+                        .build();
 
-        Event event;
-        try {
-            event = Webhook.constructEvent(payload, sigHeader, ENDPOINT_SECRET);
-        } catch (Exception e) {
-            return "Errore nella verifica del webhook";
-        }
+        SessionCreateParams.LineItem.PriceData priceData =
+                SessionCreateParams.LineItem.PriceData.builder()
+                        .setCurrency("eur")
+                        .setUnitAmount((long) (evento.getPrezzo() * 100))
+                        .setProductData(productData)
+                        .build();
 
-        if ("payment_intent.succeeded".equals(event.getType())) {
-            PaymentIntent paymentIntent = (PaymentIntent) event.getDataObjectDeserializer().getObject().orElse(null);
-            System.out.println("Pagamento riuscito: " + paymentIntent.getId());
-        }
+        SessionCreateParams.LineItem lineItem =
+                SessionCreateParams.LineItem.builder()
+                        .setPriceData(priceData)
+                        .setQuantity(1L)
+                        .build();
 
-        return "Webhook ricevuto";
+        SessionCreateParams params =
+                SessionCreateParams.builder()
+                        .addLineItem(lineItem)
+                        .setMode(SessionCreateParams.Mode.PAYMENT)
+                        .setSuccessUrl("http://localhost:3000/success")
+                        .setCancelUrl("http://localhost:3000/cancel")
+                        .build();
+
+        Session session = Session.create(params);
+
+        return session.getUrl();
     }
 }
 

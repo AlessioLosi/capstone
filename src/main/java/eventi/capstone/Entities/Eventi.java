@@ -23,6 +23,8 @@ public class Eventi {
     private int postiDisponibili;
     private LocalDate data;
     private double prezzo;
+    private String foto;
+
     @ManyToOne
     @JoinColumn(name = "id_organizzatore")
     private User organizzatore;

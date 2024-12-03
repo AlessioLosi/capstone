@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -58,5 +59,13 @@ public class EventiController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteEvento(@PathVariable UUID id_evento, @AuthenticationPrincipal User currentAuthenticatedUtente) {
         this.eventiService.deleteEvento(id_evento, currentAuthenticatedUtente);
+    }
+
+    @PatchMapping("/me/foto/{id_evento}")
+    @ResponseStatus(HttpStatus.OK)
+    public String updateAvatar(@RequestParam("foto") MultipartFile file,
+                               @AuthenticationPrincipal User currentAuthenticatedUtente,
+                               @PathVariable UUID id_evento) {
+        return this.eventiService.uploadfoto(file, currentAuthenticatedUtente, id_evento);
     }
 }

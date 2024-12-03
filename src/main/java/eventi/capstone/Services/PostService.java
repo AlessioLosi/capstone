@@ -49,6 +49,7 @@ public class PostService {
         this.pR.delete(post);
     }
 
+
     public Page<Post> findAllByCreatore(User currentAuthenticatedUtente, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return pR.findByCreatore(currentAuthenticatedUtente, pageable);

@@ -1,17 +1,22 @@
 package eventi.capstone.Services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import eventi.capstone.Entities.Eventi;
 import eventi.capstone.Entities.User;
+import eventi.capstone.Exceptions.BadRequestException;
 import eventi.capstone.Exceptions.NotFoundException;
 import eventi.capstone.Exceptions.UnauthorizedException;
 import eventi.capstone.Payloads.NewEventDTO;
 import eventi.capstone.Repositories.EventiRepository;
+import io.jsonwebtoken.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -21,6 +26,8 @@ public class EventiService {
     private EventiRepository eR;
     @Autowired
     private UserService userService;
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
     public Eventi findById(UUID id) {
         return this.eR.findById(id).orElseThrow(() -> new NotFoundException(id));
@@ -30,7 +37,32 @@ public class EventiService {
         User utente = this.userService.findById(currentUtente.getId());
         Eventi newEvento = new Eventi(payload.nome(), payload.artista(), payload.postiDisponibili(), payload.data(), payload.luogo(), payload.prezzo());
         newEvento.setOrganizzatore(utente);
+        newEvento.setFoto("https://i.pinimg.com/474x/31/d0/66/31d066238f106380c7bfa0b59ce0b3b6.jpg");
         return this.eR.save(newEvento);
+
+    }
+
+    public String uploadfoto(MultipartFile file, User currentAuthenticatedUtente, UUID id) {
+
+        if (file.isEmpty()) {
+            throw new BadRequestException("Il file dell'immagine non può essere vuoto");
+        }
+
+        String url = null;
+        try {
+            url = (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        } catch (IOException | java.io.IOException e) {
+            throw new BadRequestException("Errore nel caricamento dell'immagine");
+        }
+
+        Eventi Found = this.findById(id);
+        if (Found == null) {
+            throw new BadRequestException("Utente non trovato con l'ID fornito");
+        }
+
+        Found.setFoto(url);
+        this.eR.save(Found);
+        return url;
     }
 
     public Page<Eventi> findAll(int page, int size, String sortBy) {

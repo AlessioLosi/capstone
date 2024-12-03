@@ -13,8 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping
 public class PostController {
@@ -40,20 +38,14 @@ public class PostController {
         return this.postService.findAllByCreatore(currentAuthenticatedUtente, page, size);
     }
 
+
     @DeleteMapping("/me/post/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable UUID id, @AuthenticationPrincipal User currentAuthenticatedUtente) {
-        this.deletePost(id, currentAuthenticatedUtente);
+    public void deleteEvento(@PathVariable Long id, @AuthenticationPrincipal User currentAuthenticatedUtente) {
+        this.postService.deletePost(id, currentAuthenticatedUtente);
     }
 
-    @PutMapping("/me/post/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Post updatePost(@PathVariable Long id, @RequestBody PostDTO payload, @AuthenticationPrincipal User currentAuthenticatedUser) {
-        return this.postService.findByIdAndUpdate(id, payload, currentAuthenticatedUser);
-    }
-
-
-    @GetMapping("/tuttiPost")
+    @GetMapping("/tuttipost")
     public Page<Post> findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
                               @RequestParam(defaultValue = "id") String sortBy) {
         return this.postService.findAll(page, size, sortBy);

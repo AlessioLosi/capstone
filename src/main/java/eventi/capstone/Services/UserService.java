@@ -1,11 +1,13 @@
 package eventi.capstone.Services;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import eventi.capstone.Entities.User;
 import eventi.capstone.Exceptions.BadRequestException;
 import eventi.capstone.Exceptions.NotFoundException;
 import eventi.capstone.Payloads.UtentiDTO;
 import eventi.capstone.Repositories.UserRepository;
+import io.jsonwebtoken.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -72,4 +75,27 @@ public class UserService {
         return this.uR.save(utente);
     }
 
+    public String uploadAvatar(MultipartFile file, User currentAuthenticatedUtente) {
+
+        if (file.isEmpty()) {
+            throw new BadRequestException("Il file dell'immagine non può essere vuoto");
+        }
+
+        String url = null;
+        try {
+            url = (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        } catch (IOException | java.io.IOException e) {
+            throw new BadRequestException("Errore nel caricamento dell'immagine");
+        }
+
+        User Found = this.findById(currentAuthenticatedUtente.getId());
+        if (Found == null) {
+            throw new BadRequestException("Utente non trovato con l'ID fornito");
+        }
+
+        Found.setAvatar(url);
+        this.uR.save(Found);
+        return url;
+    }
 }
+
