@@ -1,6 +1,7 @@
 package eventi.capstone.Repositories;
 
 import eventi.capstone.Entities.Commenti;
+import eventi.capstone.Entities.Post;
 import eventi.capstone.Entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,5 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface CommentiRepository extends JpaRepository<Commenti, Long> {
     Page<Commenti> findByCreatore(User currentAuthenticatedUtente, Pageable pageable);
 
-    Page<Commenti> findByPost(Long id, Pageable pageable);
+    Page<Commenti> findByPost(Post post, Pageable pageable);
 }

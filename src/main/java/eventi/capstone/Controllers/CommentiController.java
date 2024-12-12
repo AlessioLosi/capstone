@@ -13,8 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping
 public class CommentiController {
@@ -31,10 +29,10 @@ public class CommentiController {
         return this.commentiService.saveCommenti(payload, currentAuthenticatedUtente, id);
     }
 
-    @GetMapping("/me/commento/post")
+    @GetMapping("/me/commento/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Page<Commenti> findCommentiByPost(
-            Long id,
+            @PathVariable Long id,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return this.commentiService.findAllByPost(id, page, size);
@@ -51,11 +49,11 @@ public class CommentiController {
 
     @DeleteMapping("/me/commento/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePost(@PathVariable UUID id, @AuthenticationPrincipal User currentAuthenticatedUtente) {
-        this.deletePost(id, currentAuthenticatedUtente);
+    public void deleteCommento(@PathVariable Long id, @AuthenticationPrincipal User currentAuthenticatedUtente) {
+        this.commentiService.deleteCommento(id, currentAuthenticatedUtente);
     }
 
-    @PutMapping("/me/commento")
+    @PutMapping("/me/commento/{id}")
     public Commenti updateCommenti(Long id, @AuthenticationPrincipal User currentAuthenticatedUtente, @RequestBody @Validated CommentiDTO body) {
         return this.commentiService.findByIdAndUpdate(id, body, currentAuthenticatedUtente);
     }

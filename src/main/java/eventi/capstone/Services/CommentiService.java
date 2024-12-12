@@ -59,7 +59,9 @@ public class CommentiService {
     }
 
     public Page<Commenti> findAllByPost(Long id, int page, int size) {
+
+        Post post = postService.findById(id);
         Pageable pageable = PageRequest.of(page, size);
-        return cR.findByPost(id, pageable);
+        return cR.findByPost(post, pageable);
     }
 }
