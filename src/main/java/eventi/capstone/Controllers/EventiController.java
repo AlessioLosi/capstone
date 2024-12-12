@@ -61,11 +61,14 @@ public class EventiController {
         this.eventiService.deleteEvento(id_evento, currentAuthenticatedUtente);
     }
 
+
     @PatchMapping("/me/foto/{id_evento}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String updateAvatar(@RequestParam("foto") MultipartFile file,
                                @AuthenticationPrincipal User currentAuthenticatedUtente,
                                @PathVariable UUID id_evento) {
         return this.eventiService.uploadfoto(file, currentAuthenticatedUtente, id_evento);
     }
+
 }

@@ -66,18 +66,33 @@ public class EventiService {
     }
 
     public Page<Eventi> findAll(int page, int size, String sortBy) {
-        if (size > 20) size = 20;
+        if (size > 50) size = 50;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return this.eR.findAll(pageable);
     }
 
     public void deleteEvento(UUID id_evento, User currentAuthenticatedUtente) {
         Eventi evento = this.findById(id_evento);
+
+        if (evento == null) {
+            throw new IllegalArgumentException("Evento non trovato con ID: " + id_evento);
+        }
+
         if (!evento.getOrganizzatore().getId().equals(currentAuthenticatedUtente.getId())) {
             throw new UnauthorizedException("Non hai i permessi per modificare questo evento!");
         }
+
         this.eR.delete(evento);
     }
+
+
+    public void updatePosti(UUID id_evento) {
+        Eventi evento = this.findById(id_evento);
+        evento.setPostiDisponibili(evento.getPostiDisponibili() - 1);
+        this.eR.save(evento);
+
+    }
+
 
     public Page<Eventi> findAllByArtista(String artista, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

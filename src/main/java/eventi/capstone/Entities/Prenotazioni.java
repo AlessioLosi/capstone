@@ -1,5 +1,6 @@
 package eventi.capstone.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class Prenotazioni {
     private LocalDate data;
     @ManyToOne
     @JoinColumn(name = "evento_id")
+    @JsonManagedReference
     private Eventi eventi;
     @ManyToOne
     @JoinColumn(name = "user_id")

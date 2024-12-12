@@ -3,8 +3,8 @@ package eventi.capstone.Services;
 import eventi.capstone.Entities.Eventi;
 import eventi.capstone.Entities.Prenotazioni;
 import eventi.capstone.Entities.User;
-import eventi.capstone.Exceptions.BadRequestException;
 import eventi.capstone.Exceptions.NotFoundException;
+import eventi.capstone.Exceptions.UnauthorizedException;
 import eventi.capstone.Repositories.PrenotazioniRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,14 +25,15 @@ public class PrenotazioniService {
     @Autowired
     private UserService userService;
 
-    public Prenotazioni savePrenotazione(Prenotazioni payload, User currentAuthenticatedUtente) {
-        Eventi evento = this.eventiService.findById(payload.getEventi().getId());
+    public Prenotazioni savePrenotazione(Prenotazioni prenotazioni, User currentAuthenticatedUtente) {
+        Eventi evento = this.eventiService.findById(prenotazioni.getEventi().getId());
         User utente = this.userService.findById(currentAuthenticatedUtente.getId());
-        if (this.prenoR.existsByUserAndEventi(utente, evento)) {
-            throw new BadRequestException("Hai già una prenotazione per questo evento.");
-        }
         Prenotazioni newPrenotazione = new Prenotazioni(evento, utente);
-        return this.prenoR.save(newPrenotazione);
+        if (evento.getPostiDisponibili() > 0) {
+            return this.prenoR.save(newPrenotazione);
+        } else {
+            throw new RuntimeException("posti finiti");
+        }
     }
 
     public Page<Prenotazioni> findAll(int page, int size, String sortBy) {
@@ -45,18 +46,26 @@ public class PrenotazioniService {
         return this.prenoR.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
+
     public Prenotazioni findByData(LocalDate data) {
         return this.prenoR.findByData(data).orElseThrow(() -> new NotFoundException(String.valueOf(data)));
     }
 
-    public void deletePrenotazione(UUID id_prenotazione) {
-        Prenotazioni prenotazione = this.findById(id_prenotazione);
+    public void deletePrenotazione(UUID id, User currentAuthenticatedUtente) {
+        Prenotazioni prenotazione = this.findById(id);
+        if (!prenotazione.getUser().getId().equals(currentAuthenticatedUtente.getId())) {
+            throw new UnauthorizedException("Non hai i permessi per modificare questo evento!");
+        }
         this.prenoR.delete(prenotazione);
     }
 
+    public Prenotazioni findByPaymentIntentId(String paymentIntentId) {
+        return prenoR.findByPaymentIntentId(paymentIntentId);
+    }
 
-    public boolean existsByUserAndEventi(User currentAuthenticatedUtente, Eventi evento) {
-        return false;
+    public Page<Prenotazioni> findAllByUser(User currentAuthenticatedUtente, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return prenoR.findByUser(currentAuthenticatedUtente, pageable);
     }
 
 

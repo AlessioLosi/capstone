@@ -1,9 +1,11 @@
 package eventi.capstone.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,7 +26,9 @@ public class Eventi {
     private LocalDate data;
     private double prezzo;
     private String foto;
-
+    @OneToMany(mappedBy = "eventi", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Prenotazioni> prenotazioni;
     @ManyToOne
     @JoinColumn(name = "id_organizzatore")
     private User organizzatore;
