@@ -50,4 +50,13 @@ public class PostController {
                               @RequestParam(defaultValue = "id") String sortBy) {
         return this.postService.findAll(page, size, sortBy);
     }
+
+    @PutMapping("me/post/{id}")
+    public Post findByIdAndUpdate(@PathVariable Long id, @RequestBody @Validated PostDTO body, BindingResult validationResult, @AuthenticationPrincipal User currentAuthenticatedUtente) {
+        if (validationResult.hasErrors()) {
+            validationResult.getAllErrors().forEach(System.out::println);
+            throw new BadRequestException("Ci sono stati errori nel payload!");
+        }
+        return this.postService.findByIdAndUpdate(id, body, currentAuthenticatedUtente);
+    }
 }
