@@ -61,19 +61,20 @@ public class UserService {
 
     public User findByIdAndUpdate(UUID id_utente, UtentiDTO payload) {
         User utente = this.findById(id_utente);
-        if (!utente.getEmail().equals(payload.email())) {
+
+        if (payload.email() != null && !utente.getEmail().equals(payload.email())) {
             if (this.uR.existsByEmail(payload.email()))
                 throw new BadRequestException("La mail è già in uso");
+            utente.setEmail(payload.email());
         }
 
-        utente.setNome(payload.nome());
-        utente.setCognome(payload.cognome());
-        utente.setEmail(payload.email());
-        utente.setUsername(payload.username());
-        utente.setPassword(payload.password());
-        utente.setAvatar("https://ui-avatars.com/api/?name=" + payload.nome() + "+" + payload.cognome());
+        utente.setNome(payload.nome() != null ? payload.nome() : utente.getNome());
+        utente.setCognome(payload.cognome() != null ? payload.cognome() : utente.getCognome());
+        utente.setUsername(payload.username() != null ? payload.username() : utente.getUsername());
+
         return this.uR.save(utente);
     }
+
 
     public String uploadAvatar(MultipartFile file, User currentAuthenticatedUtente) {
 
