@@ -93,6 +93,20 @@ public class EventiService {
 
     }
 
+    public Eventi updateEvento(UUID id_evento, NewEventDTO body) {
+        Eventi evento = this.findById(id_evento);
+        evento.setPrezzo(body.prezzo());
+        evento.setArtista(body.artista());
+        evento.setLuogo(body.luogo());
+        evento.setNome(body.nome());
+        evento.setData(body.data());
+        evento.setPostiDisponibili(body.postiDisponibili());
+
+        this.eR.save(evento);
+
+        return null;
+    }
+
 
     public Page<Eventi> findAllByArtista(String artista, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

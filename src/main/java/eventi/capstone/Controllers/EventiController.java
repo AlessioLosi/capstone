@@ -8,6 +8,7 @@ import eventi.capstone.Services.EventiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -70,5 +71,14 @@ public class EventiController {
                                @PathVariable UUID id_evento) {
         return this.eventiService.uploadfoto(file, currentAuthenticatedUtente, id_evento);
     }
+
+    @PutMapping("me/eventi/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Eventi> updateEveni(@PathVariable UUID id, @RequestBody NewEventDTO payload) {
+        Eventi evento = eventiService.updateEvento(id, payload);
+        return ResponseEntity.ok(evento);
+    }
+
 
 }
