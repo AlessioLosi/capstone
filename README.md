@@ -1,210 +1,133 @@
-#EventNow
-EventNow è un'applicazione per la gestione di eventi, pensata per la gestione e la prenotazione di eventi da utenti che
-possono registrarsi o autenticarsi, visualizzare/acquistare gli eventi disponibili e gestire il proprio profilo.
+# **EventNow - Backend**
 
-##Tecnologie Utilizzate
-Maven: per la gestione delle dipendenze e il build del progetto.
-Java 17: versione di Java utilizzata.
-Spring Boot: framework per la creazione dell'applicazione.
-Spring Security: per la gestione della sicurezza e dell'autenticazione.
-PostgreSQL: database relazionale per l'archiviazione dei dati.
-Stripe: per l'integrazione dei pagamenti online.
-Funzionalità
-AUTENTICAZIONE
-Login Utente
+### **Tecnologie Utilizzate**
 
-Endpoint: POST /auth/login
-Descrizione: Consente agli utenti di effettuare il login fornendo le credenziali.
-Parametri: Un oggetto NewUserLoginDTO con le credenziali dell'utente.
-Risposta: Un oggetto UserLoginResponseDTO con il token JWT.
-Registrazione Nuovo Utente
+- **Java 17**
+- **Spring Boot**
+- **Spring Security**
+- **PostgreSQL**
+- **Stripe**
+- **Maven**
 
-Endpoint: POST /auth/register
-Descrizione: Permette di registrare un nuovo utente.
-Parametri: Un oggetto UtentiDTO con i dettagli dell'utente.
-Risposta: Ritorna l'utente registrato (status 201).
-USER
-Visualizzare il Profilo dell'Utente
+---
 
-Endpoint: GET /me
-Descrizione: Recupera i dettagli del profilo dell'utente autenticato.
-Risposta: Ritorna le informazioni dell'utente.
-Aggiornare il Profilo dell'Utente
+### **Funzionalità principali**
 
-Endpoint: PUT /me
-Descrizione: Aggiorna le informazioni del profilo dell'utente.
-Corpo della richiesta: UtentiDTO (dati aggiornati dell'utente).
-Risposta: Ritorna le informazioni aggiornate dell'utente.
-Aggiornare l'Avatar
+#### **Autenticazione**
 
-Endpoint: PATCH /me/avatar
-Descrizione: Permette all'utente di caricare un nuovo avatar.
-Parametri di query: avatar (file immagine da caricare).
-Risposta: Ritorna il percorso dell'avatar caricato.
-POST
-Creare un Post
+- **Login Utente**:  
+  **Endpoint**: `/auth/login` (POST)  
+  **Descrizione**: Autenticazione utente con credenziali.  
+  **Risposta**: Token JWT.
 
-Endpoint: POST /me/post
-Descrizione: Permette a un utente autenticato di creare un post.
-Corpo della richiesta: PostDTO (dettagli del post).
-Risposta: Ritorna il post creato.
-Visualizzare i Post dell'Utente
+- **Registrazione Nuovo Utente**:  
+  **Endpoint**: `/auth/register` (POST)  
+  **Descrizione**: Registrazione di un nuovo utente.  
+  **Risposta**: Dettagli utente registrato.
 
-Endpoint: GET /me/post
-Descrizione: Recupera tutti i post creati dall'utente autenticato.
-Parametri di query: page, size (per la paginazione).
-Risposta: Lista paginata dei post.
-Eliminare un Post
+#### **Gestione Profilo Utente**
 
-Endpoint: DELETE /me/post/{id}
-Descrizione: Elimina un post dato il suo ID.
-Variabile nel percorso: id (ID del post).
-Risposta: Stato 204 (No Content).
-Visualizzare Tutti i Post
+- **Visualizza Profilo**:  
+  **Endpoint**: `/me` (GET)  
+  **Descrizione**: Recupera i dettagli del profilo dell'utente autenticato.
 
-Endpoint: GET /tuttipost
-Descrizione: Recupera tutti i post con supporto alla paginazione e ordinamento.
-Parametri di query: page, size, sortBy (opzionale per l'ordinamento).
-Risposta: Lista paginata di tutti i post.
-Aggiornare un Post
+- **Aggiorna Profilo**:  
+  **Endpoint**: `/me` (PUT)  
+  **Descrizione**: Aggiorna le informazioni del profilo dell'utente.
 
-Endpoint: PUT /me/post/{id}
-Descrizione: Aggiorna un post esistente dato il suo ID.
-Variabile nel percorso: id (ID del post).
-Corpo della richiesta: PostDTO (dettagli aggiornati del post).
-Risposta: Ritorna il post aggiornato.
-EVENTI
-Creare un Evento
+- **Carica Avatar**:  
+  **Endpoint**: `/me/avatar` (PATCH)  
+  **Descrizione**: Permette all'utente di caricare un nuovo avatar.
 
-Endpoint: POST /me/eventi
-Descrizione: Crea un nuovo evento (solo per admin).
-Corpo della richiesta: NewEventDTO (dati dell'evento).
-Risposta: Ritorna l'evento creato.
-Visualizzare Eventi per Utente
+#### **Gestione Post**
 
-Endpoint: GET /me/eventi
-Descrizione: Recupera eventi creati dall'utente autenticato, filtrabili per artista.
-Parametri di query: artista, page, size.
-Risposta: Ritorna una pagina di eventi.
-Visualizzare Tutti gli Eventi
+- **Crea Post**:  
+  **Endpoint**: `/me/post` (POST)  
+  **Descrizione**: Permette a un utente autenticato di creare un post.
 
-Endpoint: GET /tuttieventi
-Descrizione: Recupera tutti gli eventi, ordinati.
-Parametri di query: page, size, sortBy.
-Risposta: Ritorna una pagina di eventi.
-Visualizzare un Evento per ID
+- **Visualizza Post Utente**:  
+  **Endpoint**: `/me/post` (GET)  
+  **Descrizione**: Recupera tutti i post creati dall'utente autenticato.
 
-Endpoint: GET /eventi/{eventId}
-Descrizione: Recupera i dettagli di un evento specifico.
-Risposta: Ritorna l'evento richiesto.
-Eliminare un Evento
+- **Elimina Post**:  
+  **Endpoint**: `/me/post/{id}` (DELETE)  
+  **Descrizione**: Elimina un post dato il suo ID.
 
-Endpoint: DELETE /me/eventi/{id_evento}
-Descrizione: Elimina un evento (solo per admin).
-Risposta: Nessuna risposta (status 204).
-Aggiornare un Evento
+#### **Gestione Eventi**
 
-Endpoint: PUT /me/eventi/{id}
-Descrizione: Aggiorna un evento esistente (solo per admin).
-Corpo della richiesta: NewEventDTO (dati aggiornati dell'evento).
-Risposta: Ritorna l'evento aggiornato.
-Caricare una Foto per un Evento
+- **Crea Evento**:  
+  **Endpoint**: `/me/eventi` (POST) - Solo per Admin  
+  **Descrizione**: Crea un nuovo evento.
 
-Endpoint: PATCH /me/foto/{id_evento}
-Descrizione: Carica una foto per un evento (solo per admin).
-Parametri di query: foto (file immagine da caricare).
-Risposta: Ritorna il percorso della foto caricata.
-PRENOTAZIONE
-Visualizzare Prenotazioni dell'Utente
+- **Visualizza Eventi Utente**:  
+  **Endpoint**: `/me/eventi` (GET)  
+  **Descrizione**: Recupera eventi creati dall'utente autenticato.
 
-Endpoint: GET /me/prenotazioni
-Descrizione: Recupera tutte le prenotazioni effettuate dall'utente autenticato.
-Parametri di query: page, size.
-Risposta: Ritorna una pagina di prenotazioni.
-Eliminare una Prenotazione
+- **Visualizza Tutti gli Eventi**:  
+  **Endpoint**: `/tuttieventi` (GET)  
+  **Descrizione**: Recupera tutti gli eventi disponibili.
 
-Endpoint: DELETE /me/prenotazioni/{id}
-Descrizione: Elimina una prenotazione specifica per l'utente autenticato.
-Risposta: Nessuna risposta (status 204).
-STRIPE
-Crea una Sessione di Pagamento (Checkout)
+#### **Prenotazioni**
 
-Endpoint: POST /api/payments/checkout/{eventId}
-Descrizione: Crea una sessione di pagamento per un evento selezionato, associando la prenotazione al pagamento.
-Parametri: eventId (ID dell'evento per il quale si sta effettuando la prenotazione).
-Risposta: URL per completare il pagamento tramite Stripe.
-Gestisci Webhook di Stripe
+- **Visualizza Prenotazioni**:  
+  **Endpoint**: `/me/prenotazioni` (GET)  
+  **Descrizione**: Recupera tutte le prenotazioni effettuate dall'utente.
 
-Endpoint: POST /api/payments/webhook
-Descrizione: Gestisce la risposta di Stripe al pagamento completato tramite webhook.
-Parametri: payload (dati inviati da Stripe).
-Risposta: Nessuna risposta visibile (aggiorna lo stato della prenotazione a "Completato").
-COMMENTI
-Aggiungi un Commento
+- **Elimina Prenotazione**:  
+  **Endpoint**: `/me/prenotazioni/{id}` (DELETE)  
+  **Descrizione**: Elimina una prenotazione effettuata dall'utente.
 
-Endpoint: POST /me/commento
-Descrizione: Consente agli utenti di aggiungere un commento a un post.
-Parametri: Un oggetto CommentiDTO con il contenuto del commento e un ID del post.
-Risposta: Ritorna il commento creato.
-Visualizza Commenti di un Post
+#### **Stripe**
 
-Endpoint: GET /me/commento/{id}
-Descrizione: Recupera tutti i commenti di un determinato post.
-Parametri: id del post e opzioni di paginazione (page, size).
-Risposta: Una lista di commenti relativi al post.
-Visualizza Commenti dell'Utente
+- **Crea Sessione di Pagamento (Checkout)**:  
+  **Endpoint**: `/api/payments/checkout/{eventId}` (POST)  
+  **Descrizione**: Crea una sessione di pagamento per un evento selezionato.
 
-Endpoint: GET /me/commenti/utente
-Descrizione: Recupera tutti i commenti creati dall'utente autenticato.
-Parametri: Paginazione tramite page e size.
-Risposta: Una lista di commenti dell'utente autenticato.
-Elimina un Commento
-Ecco la continuazione del documento, che completa la sezione Commenti:
+- **Gestisci Webhook di Stripe**:  
+  **Endpoint**: `/api/payments/webhook` (POST)  
+  **Descrizione**: Gestisce la risposta di Stripe al pagamento completato.
 
-Elimina un Commento
+#### **Commenti**
 
-Endpoint: DELETE /me/commento/{id}
-Descrizione: Elimina un commento creato dall'utente autenticato.
-Parametri: id del commento da eliminare.
-Risposta: Nessuna risposta (status 204).
-Modifica un Commento
+- **Aggiungi un Commento**:  
+  **Endpoint**: `/me/commento` (POST)  
+  **Descrizione**: Aggiunge un commento a un post.
 
-Endpoint: PUT /me/commento/{id}
-Descrizione: Permette all'utente di aggiornare un commento esistente.
-Parametri: id del commento e un oggetto CommentiDTO con i nuovi dati.
-Risposta: Il commento aggiornato.
-Contributi
-Se desideri contribuire al progetto EventNow, segui questi passaggi:
+- **Visualizza Commenti di un Post**:  
+  **Endpoint**: `/me/commento/{id}` (GET)  
+  **Descrizione**: Recupera tutti i commenti di un determinato post.
 
-Fork del repository:
+- **Elimina Commento**:  
+  **Endpoint**: `/me/commento/{id}` (DELETE)  
+  **Descrizione**: Elimina un commento creato dall'utente.
 
-Fai un fork del progetto dal repository principale.
-Crea un nuovo branch:
+- **Modifica un Commento**:  
+  **Endpoint**: `/me/commento/{id}` (PUT)  
+  **Descrizione**: Modifica un commento esistente.
 
-Esegui il comando:
-bash
-Copia codice
-git checkout -b feature/nome-funzionalità
-Aggiungi le tue modifiche:
+---
 
-Implementa la nuova funzionalità o correggi i bug.
+### **Contributi**
+
+1. **Fork del repository**
+2. **Crea un nuovo branch**:
+   ```bash
+   git checkout -b feature/nome-funzionalità
+
+Aggiungi le tue modifiche
 Fai il commit delle modifiche:
-
-Esegui il comando:
 bash
 Copia codice
 git commit -am 'Aggiungi nuova funzionalità'
 Push delle modifiche:
-
-Esegui il comando:
 bash
 Copia codice
 git push origin feature/nome-funzionalità
-Invia una pull request:
-
-Crea una pull request per unire le modifiche al branch principale.
+Invia una pull request
 Licenza
 Questo progetto è concesso sotto la licenza MIT. Consulta il file LICENSE per maggiori dettagli.
+
 Link utili
-Stripe: https://stripe.com/docs;
-SpringBoot Doc:https://spring.io/projects/spring-boot;
+
+- **Stripe: https://stripe.com/docs;**
+- **SpringBoot Doc:https://spring.io/projects/spring-boot;**
