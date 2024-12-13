@@ -1,8 +1,8 @@
-EventNow
+#EventNow
 EventNow è un'applicazione per la gestione di eventi, pensata per la gestione e la prenotazione di eventi da utenti che
 possono registrarsi o autenticarsi, visualizzare/acquistare gli eventi disponibili e gestire il proprio profilo.
 
-Tecnologie Utilizzate
+##Tecnologie Utilizzate
 Maven: per la gestione delle dipendenze e il build del progetto.
 Java 17: versione di Java utilizzata.
 Spring Boot: framework per la creazione dell'applicazione.
